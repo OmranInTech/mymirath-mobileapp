@@ -6,81 +6,112 @@ class FatwaCard extends StatelessWidget {
 
   const FatwaCard({super.key, required this.item});
 
-  Color _getColor(String type) {
+  // Sophisticated, editorial color palette matching your clean background
+  Color _getTypeColor(String type) {
     switch (type) {
       case "Quran":
-        return Colors.green;
+        return const Color(0xFF0F5132); // Deep Sage Green
       case "Hadith":
-        return Colors.blue;
+        return const Color(0xFF0A58CA); // Premium Steel Blue
       case "Warning":
-        return Colors.red;
+        return const Color(0xFF842029); // Crimson Burgundy
       default:
-        return Colors.orange;
+        return const Color(0xFF41464B); // Slate Charcoal for Rules/Defaults
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = _getColor(item.type);
+    final typeColor = _getTypeColor(item.type);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0), // Uniform clean hairline border
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.03), // Soft modern shadow
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // TYPE TAG
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 4,
-            ),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              item.type,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(14),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 1. VISUAL ANCHOR LINE (Left colored accent indicator strip)
+              Container(
+                width: 5,
+                color: typeColor,
               ),
-            ),
+
+              // 2. CARD CONTENT AREA
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // PREMIUM MINI TAG
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: typeColor.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(6), // Clean geometric tag
+                        ),
+                        child: Text(
+                          item.type.toUpperCase(), // Clean uppercase badge styling
+                          style: TextStyle(
+                            color: typeColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // ACADEMIC TITLE
+                      Text(
+                        item.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0F172A), // Matches your primary dark text
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      // TEXT TEXTURE & CARRIAGE
+                      Text(
+                        item.content,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF334155), // High-legibility charcoal slate
+                          height: 1.5, // Perfect line height for detailed explanations
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-
-          const SizedBox(height: 10),
-
-          Text(
-            item.title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            item.content,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey.shade700,
-              height: 1.4,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

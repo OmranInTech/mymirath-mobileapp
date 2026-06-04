@@ -1,217 +1,177 @@
 import 'package:flutter/material.dart';
-import '../../domain/calculation_model.dart';
+import 'package:provider/provider.dart';
+import 'package:mymirath/features/calculator/presentation/state/calculation_model.dart';
 
-class DhawuAlArhamSection extends StatefulWidget {
-  final HeirsInput input;
-  final Function(HeirsInput) onChanged;
-
-  const DhawuAlArhamSection({
-    super.key,
-    required this.input,
-    required this.onChanged,
-  });
-
-  @override
-  State<DhawuAlArhamSection> createState() => _DhawuAlArhamSectionState();
-}
-
-class _DhawuAlArhamSectionState extends State<DhawuAlArhamSection> {
-  bool open = false;
-
-  void update(HeirsInput newInput) {
-    widget.onChanged(newInput);
-  }
+class DhawAlArhamSection extends StatelessWidget {
+  const DhawAlArhamSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final input = widget.input;
+    final state = context.watch<CalculationModel>();
 
     return Card(
-      elevation: 2,
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ================= HEADER =================
-            GestureDetector(
-              onTap: () => setState(() => open = !open),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Dhawu al-Arham (Distant Kindred)",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Text(
+              'Extended Heirs & Siblings',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey,
                   ),
-                  Icon(open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                ],
-              ),
             ),
 
-            if (!open) const SizedBox(height: 0),
+            const SizedBox(height: 8),
+            const Divider(),
 
-            if (open) ...[
-              const SizedBox(height: 12),
+            SwitchListTile(
+              title: const Text('Grandfather Alive'),
+              value: state.grandfatherAlive,
+              onChanged: (value) =>
+                  state.updateField('grandfatherAlive', value),
+            ),
 
-              // ================= GRANDPARENTS =================
-              const Text("Grandparents", style: TextStyle(fontWeight: FontWeight.bold)),
+            SwitchListTile(
+              title: const Text('Maternal Grandmother Alive'),
+              value: state.maternalGrandmotherAlive,
+              onChanged: (value) =>
+                  state.updateField('maternalGrandmotherAlive', value),
+            ),
 
-              SwitchListTile(
-                title: const Text("Grandfather Alive"),
-                value: input.grandfatherAlive,
-                onChanged: (v) {
-                  update(input.copyWith(grandfatherAlive: v));
-                },
-              ),
+            SwitchListTile(
+              title: const Text('Paternal Grandmother Alive'),
+              value: state.paternalGrandmotherAlive,
+              onChanged: (value) =>
+                  state.updateField('paternalGrandmotherAlive', value),
+            ),
 
-              SwitchListTile(
-                title: const Text("Maternal Grandmother Alive"),
-                value: input.maternalGrandmotherAlive,
-                onChanged: (v) {
-                  update(input.copyWith(maternalGrandmotherAlive: v));
-                },
-              ),
+            const Divider(),
 
-              SwitchListTile(
-                title: const Text("Paternal Grandmother Alive"),
-                value: input.paternalGrandmotherAlive,
-                onChanged: (v) {
-                  update(input.copyWith(paternalGrandmotherAlive: v));
-                },
-              ),
+            _buildCounter(
+              'Grandsons',
+              state.grandsons,
+              (value) => state.updateField('grandsons', value),
+            ),
 
-              const Divider(),
+            _buildCounter(
+              'Granddaughters',
+              state.granddaughters,
+              (value) => state.updateField('granddaughters', value),
+            ),
 
-              // ================= SIBLINGS =================
-              const Text("Siblings", style: TextStyle(fontWeight: FontWeight.bold)),
+            const Divider(),
 
-              TextFormField(
-                initialValue: input.maternalBrothers.toString(),
-                decoration: const InputDecoration(labelText: "Maternal Brothers"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    maternalBrothers: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            _buildCounter(
+              'Full Brothers',
+              state.brothers,
+              (value) => state.updateField('brothers', value),
+            ),
 
-              TextFormField(
-                initialValue: input.maternalSisters.toString(),
-                decoration: const InputDecoration(labelText: "Maternal Sisters"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    maternalSisters: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            _buildCounter(
+              'Full Sisters',
+              state.sisters,
+              (value) => state.updateField('sisters', value),
+            ),
 
-              TextFormField(
-                initialValue: input.paternalBrothers.toString(),
-                decoration: const InputDecoration(labelText: "Paternal Brothers"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    paternalBrothers: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            _buildCounter(
+              'Paternal Brothers',
+              state.paternalBrothers,
+              (value) => state.updateField('paternalBrothers', value),
+            ),
 
-              TextFormField(
-                initialValue: input.paternalSisters.toString(),
-                decoration: const InputDecoration(labelText: "Paternal Sisters"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    paternalSisters: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            _buildCounter(
+              'Paternal Sisters',
+              state.paternalSisters,
+              (value) => state.updateField('paternalSisters', value),
+            ),
 
-              const Divider(),
+            _buildCounter(
+              'Maternal Brothers',
+              state.maternalBrothers,
+              (value) => state.updateField('maternalBrothers', value),
+            ),
 
-              // ================= NEPHEWS =================
-              const Text("Nephews", style: TextStyle(fontWeight: FontWeight.bold)),
+            _buildCounter(
+              'Maternal Sisters',
+              state.maternalSisters,
+              (value) => state.updateField('maternalSisters', value),
+            ),
 
-              TextFormField(
-                initialValue: input.fullNephews.toString(),
-                decoration: const InputDecoration(labelText: "Full Nephews"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    fullNephews: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            const Divider(),
 
-              TextFormField(
-                initialValue: input.paternalNephews.toString(),
-                decoration: const InputDecoration(labelText: "Paternal Nephews"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    paternalNephews: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
+            _buildCounter(
+              'Full Nephews',
+              state.fullNephews,
+              (value) => state.updateField('fullNephews', value),
+            ),
 
-              const Divider(),
+            _buildCounter(
+              'Paternal Nephews',
+              state.paternalNephews,
+              (value) => state.updateField('paternalNephews', value),
+            ),
 
-              // ================= UNCLES =================
-              const Text("Uncles", style: TextStyle(fontWeight: FontWeight.bold)),
+            _buildCounter(
+              'Full Uncles',
+              state.fullUncles,
+              (value) => state.updateField('fullUncles', value),
+            ),
 
-              TextFormField(
-                initialValue: input.fullUncles.toString(),
-                decoration: const InputDecoration(labelText: "Full Uncles"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    fullUncles: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
-
-              TextFormField(
-                initialValue: input.paternalUncles.toString(),
-                decoration: const InputDecoration(labelText: "Paternal Uncles"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    paternalUncles: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
-
-              const Divider(),
-
-              // ================= COUSINS =================
-              const Text("Cousins", style: TextStyle(fontWeight: FontWeight.bold)),
-
-              TextFormField(
-                initialValue: input.fullCousins.toString(),
-                decoration: const InputDecoration(labelText: "Full Cousins"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    fullCousins: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
-
-              TextFormField(
-                initialValue: input.paternalCousins.toString(),
-                decoration: const InputDecoration(labelText: "Paternal Cousins"),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  update(input.copyWith(
-                    paternalCousins: int.tryParse(v) ?? 0,
-                  ));
-                },
-              ),
-            ]
+            _buildCounter(
+              'Paternal Uncles',
+              state.paternalUncles,
+              (value) => state.updateField('paternalUncles', value),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCounter(
+    String label,
+    int value,
+    ValueChanged<int> onChanged,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 14),
+            ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove),
+                onPressed:
+                    value > 0 ? () => onChanged(value - 1) : null,
+              ),
+              Text(
+                '$value',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () => onChanged(value + 1),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

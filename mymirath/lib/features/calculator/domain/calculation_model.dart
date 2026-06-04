@@ -1,98 +1,159 @@
-class HeirsInput {
-  final int sons;
-  final int daughters;
-  final bool fatherAlive;
-  final bool motherAlive;
-  final int wives;
+import 'package:flutter/material.dart';
+import '../../domain/inheritance_engine.dart';
 
-  final int brothers;
-  final int sisters;
+class CalculationModel extends ChangeNotifier {
+  String _madhhab = 'hanafi';
 
-  final int maternalBrothers;
-  final int maternalSisters;
+  bool _husbandAlive = false;
+  int _wives = 0;
 
-  final int paternalBrothers;
-  final int paternalSisters;
+  int _sons = 0;
+  int _daughters = 0;
 
-  final int fullNephews;
-  final int paternalNephews;
+  bool _motherAlive = false;
+  bool _fatherAlive = false;
 
-  final int fullUncles;
-  final int paternalUncles;
+  int _brothers = 0;
+  int _sisters = 0;
 
-  final int fullCousins;
-  final int paternalCousins;
+  int _grandsons = 0;
+  int _granddaughters = 0;
 
-  const HeirsInput({
-    this.sons = 0,
-    this.daughters = 0,
-    this.fatherAlive = false,
-    this.motherAlive = false,
-    this.wives = 0,
-    this.brothers = 0,
-    this.sisters = 0,
-    this.maternalBrothers = 0,
-    this.maternalSisters = 0,
-    this.paternalBrothers = 0,
-    this.paternalSisters = 0,
-    this.fullNephews = 0,
-    this.paternalNephews = 0,
-    this.fullUncles = 0,
-    this.paternalUncles = 0,
-    this.fullCousins = 0,
-    this.paternalCousins = 0,
-  });
+  bool _grandfatherAlive = false;
+  bool _maternalGrandmotherAlive = false;
+  bool _paternalGrandmotherAlive = false;
 
-  HeirsInput copyWith({
-    int? sons,
-    int? daughters,
-    bool? fatherAlive,
-    bool? motherAlive,
-    int? wives,
-    int? brothers,
-    int? sisters,
-    int? maternalBrothers,
-    int? maternalSisters,
-    int? paternalBrothers,
-    int? paternalSisters,
-    int? fullNephews,
-    int? paternalNephews,
-    int? fullUncles,
-    int? paternalUncles,
-    int? fullCousins,
-    int? paternalCousins,
-  }) {
-    return HeirsInput(
-      sons: sons ?? this.sons,
-      daughters: daughters ?? this.daughters,
-      fatherAlive: fatherAlive ?? this.fatherAlive,
-      motherAlive: motherAlive ?? this.motherAlive,
-      wives: wives ?? this.wives,
-      brothers: brothers ?? this.brothers,
-      sisters: sisters ?? this.sisters,
-      maternalBrothers: maternalBrothers ?? this.maternalBrothers,
-      maternalSisters: maternalSisters ?? this.maternalSisters,
-      paternalBrothers: paternalBrothers ?? this.paternalBrothers,
-      paternalSisters: paternalSisters ?? this.paternalSisters,
-      fullNephews: fullNephews ?? this.fullNephews,
-      paternalNephews: paternalNephews ?? this.paternalNephews,
-      fullUncles: fullUncles ?? this.fullUncles,
-      paternalUncles: paternalUncles ?? this.paternalUncles,
-      fullCousins: fullCousins ?? this.fullCousins,
-      paternalCousins: paternalCousins ?? this.paternalCousins,
-    );
+  int _maternalBrothers = 0;
+  int _maternalSisters = 0;
+
+  int _paternalBrothers = 0;
+  int _paternalSisters = 0;
+
+  int _fullNephews = 0;
+  int _paternalNephews = 0;
+
+  int _fullUncles = 0;
+  int _paternalUncles = 0;
+
+  int _fullCousins = 0;
+  int _paternalCousins = 0;
+
+  InheritanceResult? _currentResult;
+
+  // =====================
+  // GETTERS
+  // =====================
+
+  InheritanceResult? get currentResult => _currentResult;
+
+  int get sons => _sons;
+  int get daughters => _daughters;
+
+  bool get fatherAlive => _fatherAlive;
+  bool get motherAlive => _motherAlive;
+
+  int get maternalBrothers => _maternalBrothers;
+  int get maternalSisters => _maternalSisters;
+
+  int get paternalBrothers => _paternalBrothers;
+  int get paternalSisters => _paternalSisters;
+
+  int get fullUncles => _fullUncles;
+  int get paternalUncles => _paternalUncles;
+
+  int get fullCousins => _fullCousins;
+  int get paternalCousins => _paternalCousins;
+
+  // =====================
+  // UPDATE FIELDS
+  // =====================
+
+  void updateField(String field, dynamic value) {
+    switch (field) {
+      case 'sons':
+        _sons = value;
+        break;
+
+      case 'daughters':
+        _daughters = value;
+        break;
+
+      case 'fatherAlive':
+        _fatherAlive = value;
+        break;
+
+      case 'motherAlive':
+        _motherAlive = value;
+        break;
+
+      case 'maternalBrothers':
+        _maternalBrothers = value;
+        break;
+
+      case 'maternalSisters':
+        _maternalSisters = value;
+        break;
+
+      case 'paternalBrothers':
+        _paternalBrothers = value;
+        break;
+
+      case 'paternalSisters':
+        _paternalSisters = value;
+        break;
+
+      case 'fullUncles':
+        _fullUncles = value;
+        break;
+
+      case 'paternalUncles':
+        _paternalUncles = value;
+        break;
+
+      case 'fullCousins':
+        _fullCousins = value;
+        break;
+
+      case 'paternalCousins':
+        _paternalCousins = value;
+        break;
+    }
+
+    triggerCalculation();
   }
-}
 
-class HeirShare {
-  final String label;
-  final double share;
+  // =====================
+  // CALCULATE
+  // =====================
 
-  HeirShare({required this.label, required this.share});
-}
+  void triggerCalculation() {
+    _currentResult = InheritanceEngine.calculateShares(
+      wives: _wives,
+      husbandAlive: _husbandAlive,
+      sons: _sons,
+      daughters: _daughters,
+      motherAlive: _motherAlive,
+      fatherAlive: _fatherAlive,
+      brothers: _brothers,
+      sisters: _sisters,
+      grandsons: _grandsons,
+      granddaughters: _granddaughters,
+      grandfatherAlive: _grandfatherAlive,
+      maternalGrandmotherAlive: _maternalGrandmotherAlive,
+      paternalGrandmotherAlive: _paternalGrandmotherAlive,
+      maternalBrothers: _maternalBrothers,
+      maternalSisters: _maternalSisters,
+      paternalBrothers: _paternalBrothers,
+      paternalSisters: _paternalSisters,
+      fullNephews: _fullNephews,
+      paternalNephews: _paternalNephews,
+      fullUncles: _fullUncles,
+      paternalUncles: _paternalUncles,
+      fullCousins: _fullCousins,
+      paternalCousins: _paternalCousins,
+      madhhab: _madhhab,
+    );
 
-class CalculationResult {
-  final List<HeirShare> shares;
-
-  CalculationResult({required this.shares});
+    notifyListeners();
+  }
 }

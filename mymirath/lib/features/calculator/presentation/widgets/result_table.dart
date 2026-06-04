@@ -1,68 +1,176 @@
 import 'package:flutter/material.dart';
-import '../../domain/calculation_model.dart';
+import 'package:provider/provider.dart';
+import 'package:mymirath/features/calculator/presentation/state/calculation_model.dart';
 
 class ResultTable extends StatelessWidget {
-  final CalculationResult result;
-
-  const ResultTable({
-    super.key,
-    required this.result,
-  });
+  const ResultTable({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Results",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    final state = context.watch<CalculationModel>();
+    final results = state.currentResult;
+
+    if (results == null) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Center(
+            child: Text(
+              'Modify input counts to view calculations dynamically.',
+            ),
           ),
         ),
+      );
+    }
 
-        const SizedBox(height: 10),
+    final activeShares = results.shares.entries
+        .where((e) => e.value > 0)
+        .toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: result.shares.map((e) {
-              return Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.grey.shade200,
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Calculation Results',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green.shade800,
+                  ),
+            ),
+
+            const SizedBox(height: 12),
+
+            if (activeShares.isEmpty && results.baytulmal <= 0)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    'No eligible heirs found to distribute assets.',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      e.label,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      "${(e.share * 100).toStringAsFixed(2)}%",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+              )
+            else
+              Table(
+                border: TableBorder.symmetric(
+                  inside: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1,
+                  ),
                 ),
-              );
-            }).toList(),
-          ),
+                columnWidths: const {
+                  0: FlexColumnWidth(2),
+                  1: FlexColumnWidth(1),
+                },
+                children: [
+                  TableRow(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                    ),
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          'Heir Relation',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          'Share',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  ...activeShares.map(
+                    (entry) => TableRow(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            _formatHeirName(entry.key),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            '${(entry.value * 100).toStringAsFixed(2)}%',
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  if (results.baytulmal > 0)
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            'Baytulmal (Public Treasury)',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red.shade700,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            '${(results.baytulmal * 100).toStringAsFixed(2)}%',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red.shade700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+          ],
         ),
-      ],
+      ),
     );
+  }
+
+  String _formatHeirName(String key) {
+    if (key.isEmpty) return '';
+
+    final formatted = key.replaceAllMapped(
+      RegExp(r'(?<=[a-z])[A-Z]'),
+      (match) => ' ${match.group(0)}',
+    );
+
+    return formatted[0].toUpperCase() + formatted.substring(1);
   }
 }
