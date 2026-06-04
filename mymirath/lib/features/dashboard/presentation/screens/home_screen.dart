@@ -6,20 +6,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: const Color(0xFFFAFAFA), // Keeping your exact clean canvas color
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            // ================= HERO =================
+            // ================= HERO SECTION =================
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 56),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFF0F172A),
+                    Color(0xFF0F172A), // Your exact original deep blue-gray
                     Color(0xFF111827),
                   ],
                   begin: Alignment.topLeft,
@@ -32,24 +33,27 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     "MyMirath",
                     style: TextStyle(
-                      fontSize: 34,
+                      fontSize: 36,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 6),
                   Text(
                     "Islamic Inheritance Calculator",
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 16),
                   Text(
                     "Accurate Sharia-compliant inheritance distribution for family members with modern simplicity.",
                     style: TextStyle(
                       color: Colors.white60,
+                      fontSize: 14,
                       height: 1.5,
                     ),
                   ),
@@ -57,37 +61,41 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            // ================= STATS =================
+            // ================= STATS HUD (FLUID ROW) =================
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  _StatCard(title: "Accuracy", value: "100%"),
-                  _StatCard(title: "Cases", value: "10K+"),
-                  _StatCard(title: "Users", value: "5K+"),
+                  Expanded(child: _StatCard(title: "Accuracy", value: "100%")),
+                  SizedBox(width: 12),
+                  Expanded(child: _StatCard(title: "Cases", value: "10K+")),
+                  SizedBox(width: 12),
+                  Expanded(child: _StatCard(title: "Users", value: "5K+")),
                 ],
               ),
             ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 32),
 
-            // ================= FEATURES =================
+            // ================= FEATURES HEADER =================
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 "Features",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F172A),
+                  letterSpacing: -0.5,
                 ),
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
 
+            // ================= FEATURES CARD LIST =================
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -95,25 +103,25 @@ class HomeScreen extends StatelessWidget {
                   _FeatureCard(
                     title: "Shariah Calculation Engine",
                     desc: "Accurate distribution based on Islamic inheritance laws.",
-                    icon: Icons.calculate,
+                    icon: Icons.calculate_outlined,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 12),
                   _FeatureCard(
                     title: "Family Share Breakdown",
                     desc: "Clearly see who gets what in each scenario.",
-                    icon: Icons.family_restroom,
+                    icon: Icons.family_restroom_outlined,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 12),
                   _FeatureCard(
                     title: "Verified Fatwas",
                     desc: "Islamic scholarly references for transparency.",
-                    icon: Icons.menu_book,
+                    icon: Icons.menu_book_outlined,
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -121,6 +129,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+// ================= ORIGINAL LIGHT METRICS CARD (REFACTORED FIT) =================
 class _StatCard extends StatelessWidget {
   final String title;
   final String value;
@@ -130,15 +139,19 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white, // Keeping your clean white surfaces
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        border: Border.all(
+          color: const Color(0xFFE2E8F0), // Ultra-clean subtle modern border
+          width: 1,
+        ),
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.04), // Softened modern shadow
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           )
         ],
       ),
@@ -147,14 +160,20 @@ class _StatCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: Color(0xFF0F172A),
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 12, 
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -162,6 +181,7 @@ class _StatCard extends StatelessWidget {
   }
 }
 
+// ================= ORIGINAL FEATURE CARD (GEOMETRIC CLEAN ALIGNMENT) =================
 class _FeatureCard extends StatelessWidget {
   final String title;
   final String desc;
@@ -176,21 +196,34 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white, // Keeping your clean white surfaces
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.04), // Softened modern shadow
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           )
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // Cleaner look for multiline descriptions
         children: [
-          Icon(icon, size: 28, color: Colors.black87),
-          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9), // Subtle light background for the icon
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 24, color: const Color(0xFF0F172A)), // Your exact black/dark gray icon color
+          ),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,15 +231,18 @@ class _FeatureCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF0F172A),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   desc,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     color: Colors.grey,
+                    height: 1.4,
                   ),
                 ),
               ],
