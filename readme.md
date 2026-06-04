@@ -1,82 +1,123 @@
-# MyMirath Core Mobile Engine
+# 🧭 MyMirath Core Mobile Engine
 
-A production-grade, highly optimized cross-platform Flutter application engineered for precise Islamic inheritance distribution calculations under Sharia jurisprudence frameworks. The application decouples mathematical engine execution from presentation layers using a strict **Feature-First Clean Architecture** design paradigm.
-
-## 🛠️ Technical Stack Specifications
-
-*   **Runtime & Cross-Platform Framework:** Flutter SDK `^3.x` / Dart SDK `^3.x`
-*   **Operating System Development Environment:** Fedora Linux (Workstation Edition)
-*   **Target Compilation Platforms:** Native Android (ARM64 API level 21+) & iOS (LLVM compiled, 13.0+)
-*   **Layout Render Architecture:** Declarative Skia / Impeller graphic pipeline engine
-*   **State Hydration & Navigation Shell:** Component Lifecycle State Management (`StatefulWidget` / `IndexedStack`)
-*   **Design Paradigm Alignment:** 60-30-10 UI Layout Rule utilizing the *Emerald Harbor* color scheme
+A production-grade Flutter application engineered for **Islamic inheritance (Faraid) calculations** using a deterministic rule-based domain engine.
 
 ---
 
-## 📐 Architecture Design Matrix
+## ⚙️ Installation Guide
 
-The codebase drops traditional monolithic web file flows in favor of a **Layered Domain Separation Framework**. This layout prevents data leaks and forces high-velocity rendering updates across execution lifecycles.
+### 1. Prerequisites
+Install Flutter SDK:
+https://flutter.dev/docs/get-started/install
 
-[ USER VIEWPORTS ]
-    (Dashboard, Calculator, Fatwas, About)
-                      │
-                      ▼
-        [ PRESENTATION LAYER (UI) ]
-TextFormFields, Action Toggles, Animation Sheets
-                      │
- Passes Inputs Block  │  Emits Hydrated Output State
- (Estate, Heirs List) │  (Primary, Asaba, Radd)
-                      ▼
-           [ DOMAIN ENGINE LAYER ]
-  InheritanceEngine ──► Logic Rule Aggregation
+Check installation:
+```bash
+flutter doctor
+```
 
+### 2. Clone Project
+```bash
+git clone <your-repo-url>
+cd mymirath
+```
 
-  *   **Presentation Layer:** Contains stateless and stateful widget trees optimized for minimal layout rebuilding. Receptive fields fetch data inputs directly down to logic segments.
-*   **Domain/Logic Layer:** Pure Dart algorithmic implementation. Completely independent from the Flutter UI package ecosystem, allowing for 100% predictable unit testing.
-*   **Data Layer:** Serves static array payloads (immutable knowledge base entities and cryptographic calculations) out of memory structures.
+### 3. Get Dependencies
+```bash
+flutter pub get
+```
+
+### 4. Run Application
+```bash
+flutter run
+```
 
 ---
 
-## 🗂️ Production File Directory Topology
+## 🧠 Tech Stack
 
-```text
+- Flutter 3.x
+- Dart 3.x
+- Provider State Management
+- Clean Architecture (Feature-first)
+- Android / iOS support
+
+---
+
+## 🏗️ Architecture
+
+Presentation Layer → Domain Engine → State Layer
+
+- UI: Flutter Widgets
+- Domain: InheritanceEngine (Pure Dart)
+- State: ChangeNotifier (Provider)
+
+---
+
+## 📁 Project Structure
+
 lib/
-├── main.dart                           # App configuration bootstrap & entry pipeline
-├── core/                               # App-wide global immutable shared resources
-│   ├── constants/
-│   │   ├── app_colors.dart             # UI Palette configuration (60-30-10 Architecture Rule)
-│   │   └── app_styles.dart             # Unified typography scale and letter-spacing metrics
-│   └── widgets/
-│       └── app_navigation_hub.dart     # Multi-viewport persistence manager via IndexedStack
 │
-└── features/                           # Independent isolated operational business units
-    ├── dashboard/                      # Feature 0: App Core Entry Metrics
-    │   └── presentation/
-    │       ├── screens/
-    │       │   └── dashboard_screen.dart
-    │       └── widgets/
-    │           ├── dashboard_hero.dart # Dynamic linear gradient welcome container
-    │           └── dashboard_metrics.dart # Metrics horizontal layout distribution cards
-    │
-    ├── calculator/                     # Feature 1: The Three-Part Jurisprudence Engine
-    │   ├── domain/
-    │   │   ├── calculation_model.dart  # Data entity enforcing immutable allocation matrix outputs
-    │   │   └── inheritance_engine.dart # Core math algorithm (Ashab al-Furud, Asaba, Radd, Awal)
-    │   └── presentation/
-    │       ├── screens/
-    │       │   └── calculator_screen.dart
-    │       └── widgets/
-    │           ├── primary_shares_card.dart # UI Viewport Part A: Fixed fractional heirs ledger
-    │           ├── asaba_shares_card.dart   # UI Viewport Part B: Residuary calculations grid
-    │           └── residue_banner_card.dart # UI Viewport Part C: Automatic Radd/Awal adjustment alerts
-    │
-    ├── fatwas/                         # Feature 2: Knowledge Base Accords
-    │   ├── data/
-    │   │   └── fatwa_static_data.dart  # Static repository layer holding immutable QA structural records
-    │   └── presentation/
-    │       └── screens/
-    │           └── fatwas_screen.dart   # Low-overhead expansion tile accordion list interface
-    │
-    └── about/                          # Feature 3: Registry & Diagnostics View
-        └── presentation/
-            └── about_screen.dart       # Static metadata, developer credits, and engine compliance notes
+├── core/                               # Application shell and global state
+│   ├── constants/
+│   │   ├── app_colors.dart             # Your color design system (60-30-10)
+│   │   └── app_styles.dart             # Typography rules
+│   └── widgets/
+│       └── app_navigation_hub.dart     # The bottom navigation container bar
+│
+├── features/                           # Independent core modules
+│   │
+│   ├── dashboard/                      # Feature 1: Dashboard Info Hub
+│   │   └── presentation/
+│   │       ├── screens/
+│   │       │   └── dashboard_screen.dart
+│   │       └── widgets/
+│   │           ├── dashboard_hero.dart
+│   │           └── dashboard_metrics.dart
+│   │
+│   ├── calculator/                     # Feature 2: The 3-Part Sharia Engine
+│   │   ├── domain/
+│   │   │   ├── calculation_model.dart  # Data blueprint for inputs/outputs
+│   │   │   └── inheritance_engine.dart # Core math rules for Primary, Asaba, & Radd
+│   │   └── presentation/
+│   │       ├── screens/
+│   │       │   └── calculator_screen.dart
+│   │       └── widgets/
+│   │           ├── primary_shares_card.dart  # Part A display
+│   │           ├── asaba_shares_card.dart    # Part B display
+│   │           └── residue_banner_card.dart  # Part C display
+│   │
+│   ├── fatwas/                         # Feature 3: Scriptural Context
+│   │   ├── data/
+│   │   │   └── fatwa_static_data.dart  # Local verified QA array store
+│   │   └── presentation/
+│   │       └── screens/
+│   │           └── fatwas_screen.dart   # Drop-down accordion view
+│   │
+│   └── about/                          # Feature 4: Platform Metadata
+│       └── presentation/
+│           └── about_screen.dart       # Static details & credits view
+│
+└── main.dart                           # Root application initialization
+
+---
+
+## 🧮 Core Engine
+
+- Fixed Shares (Faraid)
+- Residual Shares (Asaba)
+- Baytulmal handling
+- Real-time recalculation
+
+---
+
+## 🚀 Run Commands Summary
+
+flutter pub get
+flutter run
+flutter clean
+
+---
+
+## 📜 License
+
+Educational / Research Use Only
