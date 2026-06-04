@@ -1,41 +1,50 @@
 import 'package:flutter/material.dart';
 
+import 'core/constants/app_colors.dart';
+import 'core/constants/app_styles.dart';
+import 'core/widgets/app_navigation_hub.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const MyMirathApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyMirathApp extends StatelessWidget {
+  const MyMirathApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       title: 'MyMirath',
+
+      // =========================
+      // THEME SYSTEM
+      // =========================
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
-      ),
-      home: const HomePage(),
-    );
-  }
-}
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+        colorScheme: ColorScheme.light(
+          primary: AppColors.primary,
+          secondary: AppColors.accent,
+          background: AppColors.background,
+          surface: AppColors.surface,
+        ),
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MyMirath Calculator'),
-      ),
-      body: const Center(
-        child: Text(
-          'Welcome to MyMirath',
-          style: TextStyle(fontSize: 22),
+        scaffoldBackgroundColor: AppColors.background,
+
+        textTheme: AppStyles.textTheme,
+
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
         ),
       ),
+
+      // =========================
+      // ROOT NAVIGATION
+      // =========================
+      home: const AppNavigationHub(),
     );
   }
 }
