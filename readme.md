@@ -54,7 +54,7 @@ Presentation Layer → Domain Engine → State Layer
 ---
 
 ## 📁 Project Structure
-
+```text
 lib/
 │
 ├── core/                               # Application shell and global state
@@ -98,7 +98,7 @@ lib/
 │           └── about_screen.dart       # Static details & credits view
 │
 └── main.dart                           # Root application initialization
-
+```
 ---
 
 ## 🧮 Core Engine
