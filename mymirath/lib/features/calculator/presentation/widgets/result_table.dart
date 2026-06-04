@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mymirath/features/calculator/presentation/state/calculation_model.dart';
+
+import 'package:mymirath/features/calculator/domain/calculation_model.dart';
 
 class ResultTable extends StatelessWidget {
   const ResultTable({super.key});
@@ -43,10 +44,9 @@ class ResultTable extends StatelessWidget {
               'Calculation Results',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.shade800,
+                    color: Colors.green,
                   ),
             ),
-
             const SizedBox(height: 12),
 
             if (activeShares.isEmpty && results.baytulmal <= 0)
@@ -64,29 +64,19 @@ class ResultTable extends StatelessWidget {
               )
             else
               Table(
-                border: TableBorder.symmetric(
-                  inside: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1,
-                  ),
-                ),
+                border: TableBorder.all(color: Colors.grey),
                 columnWidths: const {
                   0: FlexColumnWidth(2),
                   1: FlexColumnWidth(1),
                 },
                 children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                    ),
-                    children: const [
+                  const TableRow(
+                    children: [
                       Padding(
                         padding: EdgeInsets.all(10),
                         child: Text(
                           'Heir Relation',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
@@ -94,9 +84,7 @@ class ResultTable extends StatelessWidget {
                         child: Text(
                           'Share',
                           textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -107,12 +95,7 @@ class ResultTable extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(12),
-                          child: Text(
-                            _formatHeirName(entry.key),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          child: Text(_formatHeirName(entry.key)),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12),
@@ -120,8 +103,8 @@ class ResultTable extends StatelessWidget {
                             '${(entry.value * 100).toStringAsFixed(2)}%',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
-                              color: Colors.indigo,
                               fontWeight: FontWeight.bold,
+                              color: Colors.indigo,
                             ),
                           ),
                         ),
@@ -135,7 +118,7 @@ class ResultTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(12),
                           child: Text(
-                            'Baytulmal (Public Treasury)',
+                            'Baytulmal',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade700,
@@ -164,13 +147,13 @@ class ResultTable extends StatelessWidget {
   }
 
   String _formatHeirName(String key) {
-    if (key.isEmpty) return '';
-
     final formatted = key.replaceAllMapped(
       RegExp(r'(?<=[a-z])[A-Z]'),
-      (match) => ' ${match.group(0)}',
+      (m) => ' ${m.group(0)}',
     );
 
-    return formatted[0].toUpperCase() + formatted.substring(1);
+    return formatted.isEmpty
+        ? ''
+        : formatted[0].toUpperCase() + formatted.substring(1);
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/calculation_model.dart';
+import 'package:mymirath/features/calculator/domain/calculation_model.dart';
+
 import '../widgets/primary_heirs_section.dart';
 import '../widgets/dhaw_al_arham_section.dart';
 import '../widgets/result_table.dart';
 
 class CalculatorScreen extends StatefulWidget {
-  const CalculatorScreen({Key? key}) : super(key: key);
+  const CalculatorScreen({super.key});
 
   @override
   State<CalculatorScreen> createState() => _CalculatorScreenState();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/inheritance_engine.dart';
+import 'inheritance_engine.dart';
 
 class CalculationModel extends ChangeNotifier {
   String _madhhab = 'hanafi';
@@ -7,11 +7,11 @@ class CalculationModel extends ChangeNotifier {
   bool _husbandAlive = false;
   int _wives = 0;
 
-  int _sons = 0;
-  int _daughters = 0;
-
   bool _motherAlive = false;
   bool _fatherAlive = false;
+
+  int _sons = 0;
+  int _daughters = 0;
 
   int _brothers = 0;
   int _sisters = 0;
@@ -40,17 +40,28 @@ class CalculationModel extends ChangeNotifier {
 
   InheritanceResult? _currentResult;
 
-  // =====================
-  // GETTERS
-  // =====================
+  // ================= GETTERS =================
 
-  InheritanceResult? get currentResult => _currentResult;
+  String get madhhab => _madhhab;
+
+  bool get husbandAlive => _husbandAlive;
+  int get wives => _wives;
+
+  bool get motherAlive => _motherAlive;
+  bool get fatherAlive => _fatherAlive;
 
   int get sons => _sons;
   int get daughters => _daughters;
 
-  bool get fatherAlive => _fatherAlive;
-  bool get motherAlive => _motherAlive;
+  int get brothers => _brothers;
+  int get sisters => _sisters;
+
+  int get grandsons => _grandsons;
+  int get granddaughters => _granddaughters;
+
+  bool get grandfatherAlive => _grandfatherAlive;
+  bool get maternalGrandmotherAlive => _maternalGrandmotherAlive;
+  bool get paternalGrandmotherAlive => _paternalGrandmotherAlive;
 
   int get maternalBrothers => _maternalBrothers;
   int get maternalSisters => _maternalSisters;
@@ -58,18 +69,41 @@ class CalculationModel extends ChangeNotifier {
   int get paternalBrothers => _paternalBrothers;
   int get paternalSisters => _paternalSisters;
 
+  int get fullNephews => _fullNephews;
+  int get paternalNephews => _paternalNephews;
+
   int get fullUncles => _fullUncles;
   int get paternalUncles => _paternalUncles;
 
   int get fullCousins => _fullCousins;
   int get paternalCousins => _paternalCousins;
 
-  // =====================
-  // UPDATE FIELDS
-  // =====================
+  InheritanceResult? get currentResult => _currentResult;
+
+  // ================= UPDATE FIELD =================
 
   void updateField(String field, dynamic value) {
     switch (field) {
+      case 'madhhab':
+        _madhhab = value;
+        break;
+
+      case 'husbandAlive':
+        _husbandAlive = value;
+        break;
+
+      case 'wives':
+        _wives = value;
+        break;
+
+      case 'motherAlive':
+        _motherAlive = value;
+        break;
+
+      case 'fatherAlive':
+        _fatherAlive = value;
+        break;
+
       case 'sons':
         _sons = value;
         break;
@@ -78,12 +112,32 @@ class CalculationModel extends ChangeNotifier {
         _daughters = value;
         break;
 
-      case 'fatherAlive':
-        _fatherAlive = value;
+      case 'brothers':
+        _brothers = value;
         break;
 
-      case 'motherAlive':
-        _motherAlive = value;
+      case 'sisters':
+        _sisters = value;
+        break;
+
+      case 'grandsons':
+        _grandsons = value;
+        break;
+
+      case 'granddaughters':
+        _granddaughters = value;
+        break;
+
+      case 'grandfatherAlive':
+        _grandfatherAlive = value;
+        break;
+
+      case 'maternalGrandmotherAlive':
+        _maternalGrandmotherAlive = value;
+        break;
+
+      case 'paternalGrandmotherAlive':
+        _paternalGrandmotherAlive = value;
         break;
 
       case 'maternalBrothers':
@@ -100,6 +154,14 @@ class CalculationModel extends ChangeNotifier {
 
       case 'paternalSisters':
         _paternalSisters = value;
+        break;
+
+      case 'fullNephews':
+        _fullNephews = value;
+        break;
+
+      case 'paternalNephews':
+        _paternalNephews = value;
         break;
 
       case 'fullUncles':
@@ -122,14 +184,13 @@ class CalculationModel extends ChangeNotifier {
     triggerCalculation();
   }
 
-  // =====================
-  // CALCULATE
-  // =====================
+  // ================= CALCULATION =================
 
   void triggerCalculation() {
     _currentResult = InheritanceEngine.calculateShares(
-      wives: _wives,
+      madhhab: _madhhab,
       husbandAlive: _husbandAlive,
+      wives: _wives,
       sons: _sons,
       daughters: _daughters,
       motherAlive: _motherAlive,
@@ -151,7 +212,6 @@ class CalculationModel extends ChangeNotifier {
       paternalUncles: _paternalUncles,
       fullCousins: _fullCousins,
       paternalCousins: _paternalCousins,
-      madhhab: _madhhab,
     );
 
     notifyListeners();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mymirath/features/calculator/presentation/state/calculation_model.dart';
+
+import 'package:mymirath/features/calculator/domain/calculation_model.dart';
 
 class DhawAlArhamSection extends StatelessWidget {
   const DhawAlArhamSection({super.key});
@@ -27,29 +28,28 @@ class DhawAlArhamSection extends StatelessWidget {
                     color: Colors.blueGrey,
                   ),
             ),
-
             const SizedBox(height: 8),
             const Divider(),
 
             SwitchListTile(
               title: const Text('Grandfather Alive'),
               value: state.grandfatherAlive,
-              onChanged: (value) =>
-                  state.updateField('grandfatherAlive', value),
+              onChanged: (v) =>
+                  state.updateField('grandfatherAlive', v),
             ),
 
             SwitchListTile(
               title: const Text('Maternal Grandmother Alive'),
               value: state.maternalGrandmotherAlive,
-              onChanged: (value) =>
-                  state.updateField('maternalGrandmotherAlive', value),
+              onChanged: (v) =>
+                  state.updateField('maternalGrandmotherAlive', v),
             ),
 
             SwitchListTile(
               title: const Text('Paternal Grandmother Alive'),
               value: state.paternalGrandmotherAlive,
-              onChanged: (value) =>
-                  state.updateField('paternalGrandmotherAlive', value),
+              onChanged: (v) =>
+                  state.updateField('paternalGrandmotherAlive', v),
             ),
 
             const Divider(),
@@ -57,13 +57,13 @@ class DhawAlArhamSection extends StatelessWidget {
             _buildCounter(
               'Grandsons',
               state.grandsons,
-              (value) => state.updateField('grandsons', value),
+              (v) => state.updateField('grandsons', v),
             ),
 
             _buildCounter(
               'Granddaughters',
               state.granddaughters,
-              (value) => state.updateField('granddaughters', value),
+              (v) => state.updateField('granddaughters', v),
             ),
 
             const Divider(),
@@ -71,63 +71,37 @@ class DhawAlArhamSection extends StatelessWidget {
             _buildCounter(
               'Full Brothers',
               state.brothers,
-              (value) => state.updateField('brothers', value),
+              (v) => state.updateField('brothers', v),
             ),
 
             _buildCounter(
               'Full Sisters',
               state.sisters,
-              (value) => state.updateField('sisters', value),
+              (v) => state.updateField('sisters', v),
             ),
 
             _buildCounter(
               'Paternal Brothers',
               state.paternalBrothers,
-              (value) => state.updateField('paternalBrothers', value),
+              (v) => state.updateField('paternalBrothers', v),
             ),
 
             _buildCounter(
               'Paternal Sisters',
               state.paternalSisters,
-              (value) => state.updateField('paternalSisters', value),
+              (v) => state.updateField('paternalSisters', v),
             ),
 
             _buildCounter(
               'Maternal Brothers',
               state.maternalBrothers,
-              (value) => state.updateField('maternalBrothers', value),
+              (v) => state.updateField('maternalBrothers', v),
             ),
 
             _buildCounter(
               'Maternal Sisters',
               state.maternalSisters,
-              (value) => state.updateField('maternalSisters', value),
-            ),
-
-            const Divider(),
-
-            _buildCounter(
-              'Full Nephews',
-              state.fullNephews,
-              (value) => state.updateField('fullNephews', value),
-            ),
-
-            _buildCounter(
-              'Paternal Nephews',
-              state.paternalNephews,
-              (value) => state.updateField('paternalNephews', value),
-            ),
-
-            _buildCounter(
-              'Full Uncles',
-              state.fullUncles,
-              (value) => state.updateField('fullUncles', value),
-            ),
-
-            _buildCounter(
-              'Paternal Uncles',
-              state.paternalUncles,
-              (value) => state.updateField('paternalUncles', value),
+              (v) => state.updateField('maternalSisters', v),
             ),
           ],
         ),
@@ -141,29 +115,20 @@ class DhawAlArhamSection extends StatelessWidget {
     ValueChanged<int> onChanged,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ),
+          Expanded(child: Text(label)),
           Row(
             children: [
               IconButton(
                 icon: const Icon(Icons.remove),
-                onPressed:
-                    value > 0 ? () => onChanged(value - 1) : null,
+                onPressed: value > 0 ? () => onChanged(value - 1) : null,
               ),
               Text(
                 '$value',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: const Icon(Icons.add),

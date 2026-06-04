@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mymirath/features/calculator/presentation/state/calculation_model.dart';
+
+import 'package:mymirath/features/calculator/domain/calculation_model.dart';
 
 class PrimaryHeirsSection extends StatelessWidget {
   const PrimaryHeirsSection({super.key});
@@ -27,7 +28,6 @@ class PrimaryHeirsSection extends StatelessWidget {
                     color: Colors.indigo,
                   ),
             ),
-
             const Divider(height: 24),
 
             DropdownButtonFormField<String>(
@@ -37,22 +37,10 @@ class PrimaryHeirsSection extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
               items: const [
-                DropdownMenuItem(
-                  value: 'hanafi',
-                  child: Text('Hanafi'),
-                ),
-                DropdownMenuItem(
-                  value: 'shafi',
-                  child: Text('Shafi'),
-                ),
-                DropdownMenuItem(
-                  value: 'maliki',
-                  child: Text('Maliki'),
-                ),
-                DropdownMenuItem(
-                  value: 'hanbali',
-                  child: Text('Hanbali'),
-                ),
+                DropdownMenuItem(value: 'hanafi', child: Text('Hanafi')),
+                DropdownMenuItem(value: 'shafi', child: Text('Shafi')),
+                DropdownMenuItem(value: 'maliki', child: Text('Maliki')),
+                DropdownMenuItem(value: 'hanbali', child: Text('Hanbali')),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -67,9 +55,8 @@ class PrimaryHeirsSection extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: const Text('Husband Alive'),
               value: state.husbandAlive,
-              onChanged: (value) {
-                state.updateField('husbandAlive', value);
-              },
+              onChanged: (value) =>
+                  state.updateField('husbandAlive', value),
             ),
 
             if (!state.husbandAlive)
@@ -84,18 +71,16 @@ class PrimaryHeirsSection extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: const Text('Mother Alive'),
               value: state.motherAlive,
-              onChanged: (value) {
-                state.updateField('motherAlive', value);
-              },
+              onChanged: (value) =>
+                  state.updateField('motherAlive', value),
             ),
 
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text('Father Alive'),
               value: state.fatherAlive,
-              onChanged: (value) {
-                state.updateField('fatherAlive', value);
-              },
+              onChanged: (value) =>
+                  state.updateField('fatherAlive', value),
             ),
 
             const Divider(height: 24),
@@ -127,17 +112,12 @@ class PrimaryHeirsSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text(label, style: const TextStyle(fontSize: 16)),
           Row(
             children: [
               IconButton(
                 icon: const Icon(Icons.remove_circle_outline),
-                onPressed: value > 0
-                    ? () => onChanged(value - 1)
-                    : null,
+                onPressed: value > 0 ? () => onChanged(value - 1) : null,
               ),
               Text(
                 '$value',
@@ -174,9 +154,7 @@ class PrimaryHeirsSection extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.remove_circle_outline),
-                onPressed: value > 0
-                    ? () => onChanged(value - 1)
-                    : null,
+                onPressed: value > 0 ? () => onChanged(value - 1) : null,
               ),
               Text(
                 '$value',
@@ -187,9 +165,7 @@ class PrimaryHeirsSection extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.add_circle_outline),
-                onPressed: value < 4
-                    ? () => onChanged(value + 1)
-                    : null,
+                onPressed: value < 4 ? () => onChanged(value + 1) : null,
               ),
             ],
           ),
