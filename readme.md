@@ -35,8 +35,8 @@ flutter run
 
 ## 🧠 Tech Stack
 
-- Flutter 3.x
-- Dart 3.x
+- Flutter 3
+- Dart 3
 - Provider State Management
 - Clean Architecture (Feature-first)
 - Android / iOS support
